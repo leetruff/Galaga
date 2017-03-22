@@ -122,7 +122,7 @@ public class GameScreen implements Screen {
 		
 		for(int i = 0; i < enemyList.size(); i++){
 			if(enemyList.get(i).getPosX() < 0){
-				//TODO
+				//TODO Update States
 			}
 		}
 		
