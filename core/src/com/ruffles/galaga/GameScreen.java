@@ -40,6 +40,21 @@ public class GameScreen implements Screen {
 		enemyList = new ArrayList<Enemy>();
 		
 		enemyList.add(new BasicEnemy(200, 400));
+		
+//		ArrayList<Integer> testvalues = new ArrayList<Integer>();
+//		testvalues.add(1);
+//		testvalues.add(34);
+//		testvalues.add(67);
+//		testvalues.add(112);
+//		testvalues.add(199);
+//		testvalues.add(213);
+//		
+//		testvalues = Interpolation.interpolateArray(testvalues, 4);
+//		
+//		for (int i = 0; i < testvalues.size(); i++) {
+//			System.out.println(testvalues.get(i));
+//		}
+		
 	}
 
 	@Override
