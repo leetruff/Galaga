@@ -20,6 +20,8 @@ public abstract class Enemy {
 	
 	ShapeRenderer shaperenderer;
 	
+	public enum State {FLYINGLEFT, FLYINGRIGHT, IDLE, ARRIVING};
+	State currentState = State.FLYINGLEFT;
 	
 	public Enemy(int xSpawn, int ySpawn){
 		bounds = new Rectangle(xSpawn, ySpawn, 20, 20);
@@ -34,8 +36,20 @@ public abstract class Enemy {
 		shaperenderer.end();	
 	}
 	
+	float timer = 0;
 	public void update(float delta){
 		
+		timer += delta;
+		if(timer > 1){
+			
+			if(currentState == State.FLYINGLEFT)
+				setPosX(getPosX() - 10);
+			if(currentState == State.FLYINGRIGHT)
+				setPosX(getPosX() + 10);
+			
+			
+			timer = 0;
+		}
 	}
 	
 	public ShapeRenderer getShaperenderer() {

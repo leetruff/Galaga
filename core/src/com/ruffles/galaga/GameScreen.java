@@ -115,6 +115,20 @@ public class GameScreen implements Screen {
 				playership.setPosX(0);
 			}
 		}
+		
+		/*
+		 * Update enemies
+		 */
+		
+		for(int i = 0; i < enemyList.size(); i++){
+			if(enemyList.get(i).getPosX() < 0){
+				//TODO
+			}
+		}
+		
+		for(int i = 0; i < enemyList.size(); i++){
+			enemyList.get(i).update(delta);
+		}
 	}
 
 	@Override
