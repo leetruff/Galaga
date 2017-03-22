@@ -8,8 +8,8 @@ public class MyGdxGame extends Game {
 	SpriteBatch batch;
 	Texture img;
 	
-	static int V_WIDTH = 490;
-	static int V_HEIGHT = 900;
+	static int V_WIDTH = 430;
+	static int V_HEIGHT = 600;
 	
 	@Override
 	public void create () {

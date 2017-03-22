@@ -23,7 +23,6 @@ public class PlayerShip {
 		shaperenderer = new ShapeRenderer();
 		shaperenderer.setAutoShapeType(true);
 		shaperenderer.begin();
-		shaperenderer.set(ShapeType.Filled);
 		shaperenderer.setColor(Color.YELLOW);
 		shaperenderer.end();
 	}

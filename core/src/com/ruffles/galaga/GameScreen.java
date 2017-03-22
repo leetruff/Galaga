@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class GameScreen implements Screen {
@@ -46,18 +47,25 @@ public class GameScreen implements Screen {
 		
 		batch.begin();
 		playership.getShaperenderer().begin();
+		playership.getShaperenderer().set(ShapeType.Filled);
 		playership.getShaperenderer().rect(playership.getPosX(), playership.getPosY(), playership.getBounds().width, playership.getBounds().height);
 		playership.getShaperenderer().end();
 		batch.end();
+		
+		
+		Gdx.graphics.setTitle("Galaga | " + Gdx.graphics.getFramesPerSecond() + " FPS");
 	}
 
 	private void update(float delta) {
 
+		/*
+		 * Input Management
+		 */
 		if(Gdx.input.isKeyPressed(Keys.D)){
 			playership.setPosX(playership.getPosX() + 7);
 			
-			if(playership.getPosX() > 490 - playership.getBounds().getWidth()){
-				playership.setPosX((int) (490 - playership.getBounds().getWidth()));
+			if(playership.getPosX() > 430 - playership.getBounds().getWidth()){
+				playership.setPosX((int) (430 - playership.getBounds().getWidth()));
 			}
 		}
 		
