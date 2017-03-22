@@ -1,5 +1,7 @@
 package com.ruffles.galaga;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -18,6 +20,8 @@ public class GameScreen implements Screen {
 	StretchViewport port;
 	SpriteBatch batch;
 	
+	ArrayList<Enemy> enemyList;
+	
 	public GameScreen(MyGdxGame myGdxGame, int i) {
 		this.game = myGdxGame;
 	}
@@ -32,6 +36,10 @@ public class GameScreen implements Screen {
 		cam.position.set(port.getWorldWidth() / 2, port.getWorldHeight() / 2, 0);
 		
 		batch = new SpriteBatch();
+		
+		enemyList = new ArrayList<Enemy>();
+		
+		enemyList.add(new BasicEnemy(200, 400));
 	}
 
 	@Override
@@ -46,10 +54,26 @@ public class GameScreen implements Screen {
 		batch.setProjectionMatrix(cam.combined);
 		
 		batch.begin();
+		
+		/*
+		 * Drawing the playership
+		 */
 		playership.getShaperenderer().begin();
 		playership.getShaperenderer().set(ShapeType.Filled);
 		playership.getShaperenderer().rect(playership.getPosX(), playership.getPosY(), playership.getBounds().width, playership.getBounds().height);
 		playership.getShaperenderer().end();
+		
+		/*
+		 * Drawing the enemies
+		 */
+		
+		for(int i = 0; i < enemyList.size(); i++){
+			enemyList.get(i).shaperenderer.begin();
+			enemyList.get(i).getShaperenderer().set(ShapeType.Filled);
+			enemyList.get(i).getShaperenderer().rect(enemyList.get(i).getPosX(), enemyList.get(i).getPosY(), enemyList.get(i).getBounds().width, enemyList.get(i).getBounds().height);
+			enemyList.get(i).getShaperenderer().end();
+		}
+		
 		batch.end();
 		
 		
