@@ -2,7 +2,6 @@ package com.ruffles.galaga;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 
 public class PlayerShip {
@@ -14,7 +13,6 @@ public class PlayerShip {
 	
 	ShapeRenderer shaperenderer;
 	
-	//test
 	public ShapeRenderer getShaperenderer() {
 		return shaperenderer;
 	}
