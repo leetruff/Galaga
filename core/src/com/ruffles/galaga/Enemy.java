@@ -23,6 +23,7 @@ public abstract class Enemy {
 	public enum State {FLYINGLEFT, FLYINGRIGHT, IDLE, ARRIVING};
 	State currentState = State.FLYINGLEFT;
 	
+
 	public Enemy(int xSpawn, int ySpawn){
 		bounds = new Rectangle(xSpawn, ySpawn, 20, 20);
 		
@@ -50,6 +51,14 @@ public abstract class Enemy {
 			
 			timer = 0;
 		}
+	}
+	
+	public State getCurrentState() {
+		return currentState;
+	}
+	
+	public void setCurrentState(State currentState) {
+		this.currentState = currentState;
 	}
 	
 	public ShapeRenderer getShaperenderer() {

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.ruffles.galaga.Enemy.State;
 
 public class GameScreen implements Screen {
 
@@ -21,6 +22,7 @@ public class GameScreen implements Screen {
 	SpriteBatch batch;
 	
 	ArrayList<Enemy> enemyList;
+	ArrayList<Bullet> bulletList;
 	
 	public GameScreen(MyGdxGame myGdxGame, int i) {
 		this.game = myGdxGame;
@@ -39,7 +41,12 @@ public class GameScreen implements Screen {
 		
 		enemyList = new ArrayList<Enemy>();
 		
+		enemyList.add(new BasicEnemy(100, 400));
 		enemyList.add(new BasicEnemy(200, 400));
+		enemyList.add(new BasicEnemy(300, 400));
+		enemyList.add(new BasicEnemy(400, 400));
+		
+		bulletList = new ArrayList<Bullet>();
 		
 //		ArrayList<Integer> testvalues = new ArrayList<Integer>();
 //		testvalues.add(1);
@@ -89,12 +96,24 @@ public class GameScreen implements Screen {
 			enemyList.get(i).getShaperenderer().end();
 		}
 		
+		/*
+		 * Drawing the bullets
+		 */
+		for(int i = 0; i < bulletList.size(); i++){
+			bulletList.get(i).getShaperenderer().begin();
+			bulletList.get(i).getShaperenderer().set(ShapeType.Filled);
+			bulletList.get(i).getShaperenderer().rect(bulletList.get(i).getPosX(), bulletList.get(i).getPosY(), bulletList.get(i).bounds.width, bulletList.get(i).bounds.height);
+			bulletList.get(i).getShaperenderer().end();
+		}
+		
 		batch.end();
 		
 		
 		Gdx.graphics.setTitle("Galaga | " + Gdx.graphics.getFramesPerSecond() + " FPS");
 	}
 
+	float bullettimer = 0;
+	
 	private void update(float delta) {
 
 		/*
@@ -117,20 +136,57 @@ public class GameScreen implements Screen {
 		}
 		
 		/*
+		 * Shoot bullets
+		 */
+		bullettimer += delta;
+		
+		if(bullettimer > 0.125){
+			if(Gdx.input.isKeyPressed(Keys.SPACE)){
+				bulletList.add(new Bullet(playership.getPosX() + (int)playership.getBounds().width / 2, playership.getPosY() + 10, 10, this));
+			}
+			bullettimer = 0;
+		}
+		
+		/*
 		 * Update enemies
 		 */
 		
 		for(int i = 0; i < enemyList.size(); i++){
-			if(enemyList.get(i).getPosX() < 0){
-				//TODO Update States
+			if(enemyList.get(i).getPosX() < 10){
+				for(int j = 0; j < enemyList.size(); j++){
+					enemyList.get(j).setCurrentState(State.FLYINGRIGHT);
+				}
+				break;
+			}
+		}
+		
+		for(int i = 0; i < enemyList.size(); i++){
+			if(enemyList.get(i).getPosX() > 420 - enemyList.get(i).getBounds().width){
+				for(int j = 0; j < enemyList.size(); j++){
+					enemyList.get(j).setCurrentState(State.FLYINGLEFT);
+				}
+				break;
 			}
 		}
 		
 		for(int i = 0; i < enemyList.size(); i++){
 			enemyList.get(i).update(delta);
 		}
+		
+		/*
+		 * Updating Bullets
+		 */
+		for(int i = 0; i < bulletList.size(); i++){
+			bulletList.get(i).update(delta);
+		}
+		
+		System.out.println(bulletList.size());
 	}
 
+	public ArrayList<Bullet> getBulletList(){
+		return bulletList;
+	}
+	
 	@Override
 	public void resize(int width, int height) {
 
