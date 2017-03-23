@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.ruffles.galaga.Enemy.State;
+import com.sun.javafx.geom.Point2D;
 
 public class GameScreen implements Screen {
 
@@ -28,6 +29,17 @@ public class GameScreen implements Screen {
 	
 	Swarm swarm;
 	
+	ArrayList<Point2D> pathLeft;
+	ArrayList<Point2D> pathRight;
+	
+	public ArrayList<Point2D> getPathLeft() {
+		return pathLeft;
+	}
+	
+	public ArrayList<Point2D> getPathRight() {
+		return pathRight;
+	}
+
 	public GameScreen(MyGdxGame myGdxGame, int i) {
 		this.game = myGdxGame;
 	}
@@ -35,6 +47,23 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 		System.out.println("GameScreen shown");
+		
+		/*
+		 * Creation of paths with interpolation
+		 * middle of screen 430 / 2 = 215
+		 */
+		pathLeft = new ArrayList<Point2D>();
+		
+		pathLeft.add(new Point2D(0, 200));
+		pathLeft.add(new Point2D(50, 250));
+		pathLeft.add(new Point2D(100, 250));
+		pathLeft.add(new Point2D(150, 300));
+		pathLeft.add(new Point2D(150, 350));
+		pathLeft.add(new Point2D(100, 350));
+		
+		pathLeft = Interpolation.interpolateArray(pathLeft, 3);
+		
+		
 		playership = new PlayerShip();
 		
 		cam = new OrthographicCamera();
@@ -215,6 +244,13 @@ public class GameScreen implements Screen {
 			if(enemyList.get(i).hit){
 				enemyList.remove(i);
 			}
+		}
+		
+		/*
+		 * Update swarms
+		 */
+		for(int i = 0; i < swarmList.size(); i++){
+			swarmList.get(i).update(delta);
 		}
 		
 	}

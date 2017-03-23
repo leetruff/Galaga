@@ -1,8 +1,11 @@
 package com.ruffles.galaga;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.sun.javafx.geom.Point2D;
 
 
 /*
@@ -22,10 +25,12 @@ public abstract class Enemy {
 	ShapeRenderer shaperenderer;
 	
 	public enum State {FLYINGLEFT, FLYINGRIGHT, IDLE, ARRIVING};
-	State currentState = State.FLYINGLEFT;
+	State currentState = State.ARRIVING;
+	
+	GameScreen gameScreen;
 	
 
-	public Enemy(int xSpawn, int ySpawn){
+	public Enemy(int xSpawn, int ySpawn, GameScreen gameScreen){
 		bounds = new Rectangle(xSpawn, ySpawn, 20, 20);
 		
 		posX = xSpawn;
@@ -36,25 +41,37 @@ public abstract class Enemy {
 		shaperenderer.begin();
 		shaperenderer.setColor(Color.RED);
 		shaperenderer.end();	
+		
+		this.gameScreen = gameScreen;
 	}
 	
 	float timer = 0;
+
+
+	private ArrayList<Point2D> currentPath = new ArrayList<Point2D>();
+	int pathStep = 0;
 	public void update(float delta){
 		
 		timer += delta;
-		if(timer > 1){
+		if(timer > 0.03){
 			
 			if(currentState == State.FLYINGLEFT)
 				setPosX(getPosX() - 10);
 			if(currentState == State.FLYINGRIGHT)
 				setPosX(getPosX() + 10);
 			
+			if(currentState == State.ARRIVING && pathStep < currentPath.size()){
+				posX = (int) currentPath.get(pathStep).x;
+				posY = (int) currentPath.get(pathStep).y;
+				pathStep++;
+			}
 			
 			timer = 0;
 		}
 		
 		bounds.setPosition(getPosX(), getPosY());
 	}
+	
 	
 	public State getCurrentState() {
 		return currentState;
@@ -90,6 +107,19 @@ public abstract class Enemy {
 
 	public void setHit(boolean b) {
 		hit = b;
+	}
+
+
+	public void startFlyInLeft(int offset) {
+		currentPath = gameScreen.getPathLeft();
+		currentPath.add(new Point2D((currentPath.get(currentPath.size()-1).x + (offset * 30)), currentPath.get(currentPath.size()-1).y));
+		System.out.println(currentPath.get(currentPath.size()-1).x);
+		//TODO fix this^
+	}
+
+
+	public void startFlyInRight() {
+		
 	}
 	
 }
