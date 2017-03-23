@@ -24,6 +24,9 @@ public class GameScreen implements Screen {
 	
 	ArrayList<Enemy> enemyList;
 	ArrayList<Bullet> bulletList;
+	ArrayList<Swarm> swarmList;
+	
+	Swarm swarm;
 	
 	public GameScreen(MyGdxGame myGdxGame, int i) {
 		this.game = myGdxGame;
@@ -42,10 +45,10 @@ public class GameScreen implements Screen {
 		
 		enemyList = new ArrayList<Enemy>();
 		
-		enemyList.add(new BasicEnemy(100, 400));
-		enemyList.add(new BasicEnemy(200, 400));
-		enemyList.add(new BasicEnemy(300, 400));
-		enemyList.add(new BasicEnemy(400, 400));
+//		enemyList.add(new BasicEnemy(100, 400));
+//		enemyList.add(new BasicEnemy(200, 400));
+//		enemyList.add(new BasicEnemy(300, 400));
+//		enemyList.add(new BasicEnemy(400, 400));
 		
 		bulletList = new ArrayList<Bullet>();
 		
@@ -62,6 +65,12 @@ public class GameScreen implements Screen {
 //		for (int i = 0; i < testvalues.size(); i++) {
 //			System.out.println(testvalues.get(i));
 //		}
+		
+		swarmList = new ArrayList<Swarm>();
+		
+		swarm = new Swarm(5, Direction.LEFT, this);
+		swarmList.add(swarm);
+		
 		
 	}
 
@@ -106,6 +115,7 @@ public class GameScreen implements Screen {
 			bulletList.get(i).getShaperenderer().rect(bulletList.get(i).getPosX(), bulletList.get(i).getPosY(), bulletList.get(i).bounds.width, bulletList.get(i).bounds.height);
 			bulletList.get(i).getShaperenderer().end();
 		}
+		
 		
 		batch.end();
 		
@@ -155,7 +165,9 @@ public class GameScreen implements Screen {
 		for(int i = 0; i < enemyList.size(); i++){
 			if(enemyList.get(i).getPosX() < 10){
 				for(int j = 0; j < enemyList.size(); j++){
-					enemyList.get(j).setCurrentState(State.FLYINGRIGHT);
+					if(enemyList.get(j).getCurrentState() != State.ARRIVING){
+						enemyList.get(j).setCurrentState(State.FLYINGRIGHT);
+					}
 				}
 				break;
 			}
@@ -164,7 +176,9 @@ public class GameScreen implements Screen {
 		for(int i = 0; i < enemyList.size(); i++){
 			if(enemyList.get(i).getPosX() > 420 - enemyList.get(i).getBounds().width){
 				for(int j = 0; j < enemyList.size(); j++){
-					enemyList.get(j).setCurrentState(State.FLYINGLEFT);
+					if(enemyList.get(j).getCurrentState() != State.ARRIVING){
+						enemyList.get(j).setCurrentState(State.FLYINGRIGHT);
+					}
 				}
 				break;
 			}
