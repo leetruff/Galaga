@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.ruffles.galaga.Enemy.State;
 
@@ -178,6 +179,28 @@ public class GameScreen implements Screen {
 		 */
 		for(int i = 0; i < bulletList.size(); i++){
 			bulletList.get(i).update(delta);
+		}
+		
+		/*
+		 * Check for enemy / bullet collision
+		 */
+		for(int i = 0; i < bulletList.size(); i++){
+			for(int j = 0; j < enemyList.size(); j++){
+				if(Intersector.overlaps(bulletList.get(i).bounds, enemyList.get(j).getBounds())){
+					enemyList.get(j).setHit(true);
+					bulletList.get(i).setHit(true);
+				}
+			}
+			bulletList.get(i).update(delta);
+		}
+		
+		/*
+		 * Remove hit enemies
+		 */
+		for(int i = 0; i < enemyList.size(); i++){
+			if(enemyList.get(i).hit){
+				enemyList.remove(i);
+			}
 		}
 		
 	}

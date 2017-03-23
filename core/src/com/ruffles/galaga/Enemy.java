@@ -17,6 +17,7 @@ public abstract class Enemy {
 
 	int posX = 0;
 	int posY = 0;
+	boolean hit = false;
 	
 	ShapeRenderer shaperenderer;
 	
@@ -51,6 +52,8 @@ public abstract class Enemy {
 			
 			timer = 0;
 		}
+		
+		bounds.setPosition(getPosX(), getPosY());
 	}
 	
 	public State getCurrentState() {
@@ -83,6 +86,10 @@ public abstract class Enemy {
 	
 	public void setPosY(int posY) {
 		this.posY = posY;
+	}
+
+	public void setHit(boolean b) {
+		hit = b;
 	}
 	
 }

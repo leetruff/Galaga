@@ -12,7 +12,7 @@ public class Bullet {
 	int posX = 0;
 	int posY = 0;
 	int speed;
-	
+	boolean hit = false;
 	ShapeRenderer shaperenderer;
 	GameScreen gameScreen;
 	
@@ -55,9 +55,16 @@ public class Bullet {
 
 	public void update(float delta) {
 		posY += speed;
-		if(posY > 600){
+		
+		bounds.setPosition(getPosX(), getPosY());
+		
+		if(posY > 600 || hit){
 			gameScreen.getBulletList().remove(this);
 		}
+	}
+
+	public void setHit(boolean b) {
+		hit = b;
 	}
 	
 }
