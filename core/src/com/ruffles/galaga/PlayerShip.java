@@ -14,6 +14,7 @@ public class PlayerShip {
 	
 	ShapeRenderer shaperenderer;
 	
+	//test
 	public ShapeRenderer getShaperenderer() {
 		return shaperenderer;
 	}
