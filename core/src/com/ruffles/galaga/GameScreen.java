@@ -180,7 +180,6 @@ public class GameScreen implements Screen {
 			bulletList.get(i).update(delta);
 		}
 		
-		System.out.println(bulletList.size());
 	}
 
 	public ArrayList<Bullet> getBulletList(){
