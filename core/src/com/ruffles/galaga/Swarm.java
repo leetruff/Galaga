@@ -34,7 +34,7 @@ public class Swarm {
 			}
 			
 			if(direction == Direction.RIGHT){
-				enemyList.add(new BasicEnemy(400, 300, gameScreen));
+				enemyList.add(new BasicEnemy(600, 300, gameScreen));
 			}
 		}
 		
@@ -52,19 +52,31 @@ public class Swarm {
 			startNextEnemy();
 			startPathTimer = 0;
 		}
+		
+		for(int i = 0; i < enemyList.size(); i++){
+			if(enemyList.get(i).getCurrentState() == State.IDLE){
+				if(i == enemyList.size()-1){
+					for(int j = 0; j < enemyList.size(); j++){
+						enemyList.get(j).setCurrentState(State.FLYINGLEFT);
+					}
+				}
+			}
+			
+			else{
+				break;
+			}
+		}
 	}
 	
 	int currentEnemy = 0;
 	private void startNextEnemy() {
 		if(currentEnemy < enemyList.size()){
 			
-			if(direction == Direction.LEFT){
+			if(direction == Direction.LEFT)
 			enemyList.get(currentEnemy).startFlyInLeft(currentEnemy);
-			System.out.println("started enemy #" + currentEnemy);
-			}
 			
 			if(direction == Direction.RIGHT)
-			enemyList.get(currentEnemy).startFlyInRight();
+			enemyList.get(currentEnemy).startFlyInRight(currentEnemy);
 			
 			currentEnemy++;
 		}

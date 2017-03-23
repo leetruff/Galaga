@@ -46,6 +46,7 @@ public abstract class Enemy {
 	}
 	
 	float timer = 0;
+	float timer1 = 0;
 
 
 	private ArrayList<Point2D> currentPath = new ArrayList<Point2D>();
@@ -53,19 +54,27 @@ public abstract class Enemy {
 	public void update(float delta){
 		
 		timer += delta;
-		if(timer > 0.03){
-			
+		timer1 += delta;
+		
+		if(timer1 > 0.05){
 			if(currentState == State.FLYINGLEFT)
-				setPosX(getPosX() - 10);
+				setPosX(getPosX() - 3);
 			if(currentState == State.FLYINGRIGHT)
-				setPosX(getPosX() + 10);
-			
+				setPosX(getPosX() + 3);
+			timer1 = 0;
+		}
+		
+		
+		if(timer > 0.03){
 			if(currentState == State.ARRIVING && pathStep < currentPath.size()){
 				posX = (int) currentPath.get(pathStep).x;
 				posY = (int) currentPath.get(pathStep).y;
 				pathStep++;
+				
+				if(pathStep == currentPath.size() && currentState != State.IDLE){
+					currentState = State.IDLE;
+				}
 			}
-			
 			timer = 0;
 		}
 		
@@ -110,16 +119,17 @@ public abstract class Enemy {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public void startFlyInLeft(int offset) {
-		currentPath = gameScreen.getPathLeft();
+		currentPath = (ArrayList<Point2D>) gameScreen.getPathLeft().clone();
 		currentPath.add(new Point2D((currentPath.get(currentPath.size()-1).x + (offset * 30)), currentPath.get(currentPath.size()-1).y));
-		System.out.println(currentPath.get(currentPath.size()-1).x);
-		//TODO fix this^
 	}
 
 
-	public void startFlyInRight() {
-		
+	@SuppressWarnings("unchecked")
+	public void startFlyInRight(int offset) {
+		currentPath = (ArrayList<Point2D>) gameScreen.getPathRight().clone();
+		currentPath.add(new Point2D((currentPath.get(currentPath.size()-1).x - (offset * 30)), currentPath.get(currentPath.size()-1).y));
 	}
 	
 }

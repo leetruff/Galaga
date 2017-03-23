@@ -28,6 +28,7 @@ public class GameScreen implements Screen {
 	ArrayList<Swarm> swarmList;
 	
 	Swarm swarm;
+	Swarm swarm2;
 	
 	ArrayList<Point2D> pathLeft;
 	ArrayList<Point2D> pathRight;
@@ -59,9 +60,22 @@ public class GameScreen implements Screen {
 		pathLeft.add(new Point2D(100, 250));
 		pathLeft.add(new Point2D(150, 300));
 		pathLeft.add(new Point2D(150, 350));
-		pathLeft.add(new Point2D(100, 350));
+		pathLeft.add(new Point2D(65, 350));
 		
 		pathLeft = Interpolation.interpolateArray(pathLeft, 3);
+		
+		
+		
+		pathRight = new ArrayList<Point2D>();
+		
+		pathRight.add(new Point2D(400, 200));
+		pathRight.add(new Point2D(350, 250));
+		pathRight.add(new Point2D(300, 250));
+		pathRight.add(new Point2D(250, 300));
+		pathRight.add(new Point2D(250, 350));
+		pathRight.add(new Point2D(335, 350));
+		
+		pathRight = Interpolation.interpolateArray(pathRight, 3);
 		
 		
 		playership = new PlayerShip();
@@ -97,8 +111,11 @@ public class GameScreen implements Screen {
 		
 		swarmList = new ArrayList<Swarm>();
 		
-		swarm = new Swarm(5, Direction.LEFT, this);
+		swarm = new Swarm(5, Direction.RIGHT, this);
 		swarmList.add(swarm);
+		
+		swarm2 = new Swarm(5, Direction.LEFT, this);
+		swarmList.add(swarm2);
 		
 		
 	}
@@ -206,7 +223,7 @@ public class GameScreen implements Screen {
 			if(enemyList.get(i).getPosX() > 420 - enemyList.get(i).getBounds().width){
 				for(int j = 0; j < enemyList.size(); j++){
 					if(enemyList.get(j).getCurrentState() != State.ARRIVING){
-						enemyList.get(j).setCurrentState(State.FLYINGRIGHT);
+						enemyList.get(j).setCurrentState(State.FLYINGLEFT);
 					}
 				}
 				break;
@@ -242,6 +259,11 @@ public class GameScreen implements Screen {
 		 */
 		for(int i = 0; i < enemyList.size(); i++){
 			if(enemyList.get(i).hit){
+				
+				for(int j = 0; j < swarmList.size(); j++){
+					swarmList.get(j).enemyList.remove(enemyList.get(i));
+				}
+				
 				enemyList.remove(i);
 			}
 		}
