@@ -79,6 +79,7 @@ public abstract class Enemy {
 		}
 		
 		bounds.setPosition(getPosX(), getPosY());
+		
 	}
 	
 	

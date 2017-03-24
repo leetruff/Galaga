@@ -255,6 +255,13 @@ public class GameScreen implements Screen {
 		}
 		
 		/*
+		 * Update swarms
+		 */
+		for(int i = 0; i < swarmList.size(); i++){
+			swarmList.get(i).update(delta);
+		}
+		
+		/*
 		 * Remove hit enemies
 		 */
 		for(int i = 0; i < enemyList.size(); i++){
@@ -263,18 +270,14 @@ public class GameScreen implements Screen {
 				for(int j = 0; j < swarmList.size(); j++){
 					swarmList.get(j).enemyList.remove(enemyList.get(i));
 				}
-				
 				enemyList.remove(i);
 			}
 		}
 		
-		/*
-		 * Update swarms
-		 */
-		for(int i = 0; i < swarmList.size(); i++){
-			swarmList.get(i).update(delta);
-		}
-		
+//		for(int i = 0; i < enemyList.size(); i++){
+//			System.out.println(enemyList.get(i).getCurrentState());
+//		}
+		System.out.println(enemyList.size());
 	}
 
 	public ArrayList<Bullet> getBulletList(){
