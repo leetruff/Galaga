@@ -6,9 +6,11 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -34,6 +36,8 @@ public class GameScreen implements Screen {
 	ArrayList<Point2D> pathRight;
 	
 	Random rand;
+	
+	ShapeRenderer renderer;
 	
 	public ArrayList<Point2D> getPathLeft() {
 		return pathLeft;
@@ -63,7 +67,7 @@ public class GameScreen implements Screen {
 		ArrayList<Enemy> result = new ArrayList<Enemy>();
 		
 		for(int i = 0; i < count; i++){
-			result.add(new BasicEnemy(0, 0, this));
+			result.add(new BasicEnemy(-100, 0, this));
 			result.get(i).setCurrentPath(generateRandomPath());
 		}
 		
@@ -144,7 +148,11 @@ public class GameScreen implements Screen {
 //		swarm2 = new Swarm(5, Direction.LEFT, this);
 //		swarmList.add(swarm2);
 		
-			enemyList.addAll(generateEnemies(10));
+		enemyList.addAll(generateEnemies(10));
+		
+		renderer = new ShapeRenderer();
+		renderer.setAutoShapeType(true);
+		renderer.setColor(Color.RED);
 		
 	}
 
@@ -159,40 +167,47 @@ public class GameScreen implements Screen {
 		
 		batch.setProjectionMatrix(cam.combined);
 		
+		
+		renderer.begin();
 		batch.begin();
+		
+		renderer.set(ShapeType.Filled);
 		
 		/*
 		 * Drawing the playership
 		 */
-		playership.getShaperenderer().begin();
-		playership.getShaperenderer().set(ShapeType.Filled);
-		playership.getShaperenderer().rect(playership.getPosX(), playership.getPosY(), playership.getBounds().width, playership.getBounds().height);
-		playership.getShaperenderer().end();
+//		playership.getShaperenderer().begin();
+//		playership.getShaperenderer().set(ShapeType.Filled);
+//		playership.getShaperenderer().rect(playership.getPosX(), playership.getPosY(), playership.getBounds().width, playership.getBounds().height);
+//		playership.getShaperenderer().end();
+		
 		
 		/*
 		 * Drawing the enemies
 		 */
-		
+		renderer.setColor(Color.RED);
 		for(int i = 0; i < enemyList.size(); i++){
-			enemyList.get(i).shaperenderer.begin();
-			enemyList.get(i).getShaperenderer().set(ShapeType.Filled);
-			enemyList.get(i).getShaperenderer().rect(enemyList.get(i).getPosX(), enemyList.get(i).getPosY(), enemyList.get(i).getBounds().width, enemyList.get(i).getBounds().height);
-			enemyList.get(i).getShaperenderer().end();
+			//enemyList.get(i).getShaperenderer().begin();
+			//enemyList.get(i).getShaperenderer().set(ShapeType.Filled);
+			renderer.rect(enemyList.get(i).getPosX(), enemyList.get(i).getPosY(), enemyList.get(i).getBounds().width, enemyList.get(i).getBounds().height);
+			//enemyList.get(i).getShaperenderer().end();
 		}
 		
 		/*
 		 * Drawing the bullets
 		 */
+		renderer.setColor(Color.YELLOW);
 		for(int i = 0; i < bulletList.size(); i++){
-			bulletList.get(i).getShaperenderer().begin();
-			bulletList.get(i).getShaperenderer().set(ShapeType.Filled);
-			bulletList.get(i).getShaperenderer().rect(bulletList.get(i).getPosX(), bulletList.get(i).getPosY(), bulletList.get(i).bounds.width, bulletList.get(i).bounds.height);
-			bulletList.get(i).getShaperenderer().end();
+			//bulletList.get(i).getShaperenderer().begin();
+			//bulletList.get(i).getShaperenderer().set(ShapeType.Filled);
+			renderer.rect(bulletList.get(i).getPosX(), bulletList.get(i).getPosY(), bulletList.get(i).bounds.width, bulletList.get(i).bounds.height);
+			//bulletList.get(i).getShaperenderer().end();
 		}
 		
+		playership.draw(batch);
 		
 		batch.end();
-		
+		renderer.end();
 		
 		Gdx.graphics.setTitle("Galaga | " + Gdx.graphics.getFramesPerSecond() + " FPS");
 	}
@@ -221,13 +236,19 @@ public class GameScreen implements Screen {
 		}
 		
 		/*
+		 * Update playership
+		 */
+		
+		playership.update(delta);
+		
+		/*
 		 * Shoot bullets
 		 */
 		bullettimer += delta;
 		
 		if(bullettimer > 0.125){
 			if(Gdx.input.isKeyPressed(Keys.SPACE)){
-				bulletList.add(new Bullet(playership.getPosX() + (int)playership.getBounds().width / 2, playership.getPosY() + 10, 10, this));
+				bulletList.add(new Bullet(playership.getPosX() + (int)playership.getBounds().width / 2 + 20, playership.getPosY() + 90, 10, this));
 			}
 			bullettimer = 0;
 		}
@@ -299,7 +320,7 @@ public class GameScreen implements Screen {
 	
 	@Override
 	public void resize(int width, int height) {
-
+		port.update(width, height);
 	}
 
 	@Override
