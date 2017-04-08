@@ -80,6 +80,11 @@ public abstract class Enemy {
 		
 		bounds.setPosition(getPosX(), getPosY());
 		
+		
+		if(hit){
+			gameScreen.enemyList.remove(this);
+			gameScreen.swarmList.remove(this);
+		}
 	}
 	
 	
