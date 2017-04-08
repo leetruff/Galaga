@@ -49,7 +49,7 @@ public class Swarm {
 		startPathTimer += delta;
 		
 		if(startPathTimer > 0.25){
-			startNextEnemy();
+			//startNextEnemy();
 			startPathTimer = 0;
 		}
 		
@@ -69,18 +69,18 @@ public class Swarm {
 	}
 	
 	int currentEnemy = 0;
-	private void startNextEnemy() {
-		if(currentEnemy < enemyList.size()){
-			
-			if(direction == Direction.LEFT)
-			enemyList.get(currentEnemy).startFlyInLeft(currentEnemy);
-			
-			if(direction == Direction.RIGHT)
-			enemyList.get(currentEnemy).startFlyInRight(currentEnemy);
-			
-			currentEnemy++;
-		}
-	}
+//	private void startNextEnemy() {
+//		if(currentEnemy < enemyList.size()){
+//			
+//			if(direction == Direction.LEFT)
+//			enemyList.get(currentEnemy).startFlyInLeft(currentEnemy);
+//			
+//			if(direction == Direction.RIGHT)
+//			enemyList.get(currentEnemy).startFlyInRight(currentEnemy);
+//			
+//			currentEnemy++;
+//		}
+//	}
 
 	public ShapeRenderer getShaperenderer() {
 		return shaperenderer;

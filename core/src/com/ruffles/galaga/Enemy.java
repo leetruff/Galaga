@@ -56,23 +56,23 @@ public abstract class Enemy {
 		timer += delta;
 		timer1 += delta;
 		
-		if(timer1 > 0.05){
-			if(currentState == State.FLYINGLEFT)
-				setPosX(getPosX() - 3);
-			if(currentState == State.FLYINGRIGHT)
-				setPosX(getPosX() + 3);
-			timer1 = 0;
-		}
+//		if(timer1 > 0.05){
+//			if(currentState == State.FLYINGLEFT)
+//				setPosX(getPosX() - 3);
+//			if(currentState == State.FLYINGRIGHT)
+//				setPosX(getPosX() + 3);
+//			timer1 = 0;
+//		}
 		
 		
 		if(timer > 0.03){
-			if(currentState == State.ARRIVING && pathStep < currentPath.size()){
+			if(pathStep < currentPath.size()){
 				posX = (int) currentPath.get(pathStep).x;
 				posY = (int) currentPath.get(pathStep).y;
 				pathStep++;
 				
-				if(pathStep == currentPath.size() && currentState != State.IDLE){
-					currentState = State.IDLE;
+				if(pathStep == currentPath.size()){
+					pathStep = 0;
 				}
 			}
 			timer = 0;
@@ -83,7 +83,6 @@ public abstract class Enemy {
 		
 		if(hit){
 			gameScreen.enemyList.remove(this);
-			gameScreen.swarmList.remove(this);
 		}
 	}
 	
@@ -124,18 +123,21 @@ public abstract class Enemy {
 		hit = b;
 	}
 
-
-	@SuppressWarnings("unchecked")
-	public void startFlyInLeft(int offset) {
-		currentPath = (ArrayList<Point2D>) gameScreen.getPathLeft().clone();
-		currentPath.add(new Point2D((currentPath.get(currentPath.size()-1).x + (offset * 30)), currentPath.get(currentPath.size()-1).y));
+	public void setCurrentPath(ArrayList<Point2D> path){
+		currentPath = path;
 	}
-
-
-	@SuppressWarnings("unchecked")
-	public void startFlyInRight(int offset) {
-		currentPath = (ArrayList<Point2D>) gameScreen.getPathRight().clone();
-		currentPath.add(new Point2D((currentPath.get(currentPath.size()-1).x - (offset * 30)), currentPath.get(currentPath.size()-1).y));
-	}
+	
+//	@SuppressWarnings("unchecked")
+//	public void startFlyInLeft(int offset) {
+//		currentPath = (ArrayList<Point2D>) gameScreen.getPathLeft().clone();
+//		currentPath.add(new Point2D((currentPath.get(currentPath.size()-1).x + (offset * 30)), currentPath.get(currentPath.size()-1).y));
+//	}
+//
+//
+//	@SuppressWarnings("unchecked")
+//	public void startFlyInRight(int offset) {
+//		currentPath = (ArrayList<Point2D>) gameScreen.getPathRight().clone();
+//		currentPath.add(new Point2D((currentPath.get(currentPath.size()-1).x - (offset * 30)), currentPath.get(currentPath.size()-1).y));
+//	}
 	
 }

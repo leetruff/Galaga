@@ -1,6 +1,7 @@
 package com.ruffles.galaga;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.ruffles.galaga.Enemy.State;
 import com.sun.javafx.geom.Point2D;
 
 public class GameScreen implements Screen {
@@ -33,6 +33,8 @@ public class GameScreen implements Screen {
 	ArrayList<Point2D> pathLeft;
 	ArrayList<Point2D> pathRight;
 	
+	Random rand;
+	
 	public ArrayList<Point2D> getPathLeft() {
 		return pathLeft;
 	}
@@ -44,10 +46,35 @@ public class GameScreen implements Screen {
 	public GameScreen(MyGdxGame myGdxGame, int i) {
 		this.game = myGdxGame;
 	}
+	
+	public ArrayList<Point2D> generateRandomPath(){
+		ArrayList<Point2D> result = new ArrayList<Point2D>();
+		
+		for(int i = 0; i < 10; i++){
+			result.add(new Point2D(rand.nextInt(400), rand.nextInt(200) + 350));
+		}
+		
+		result.add(new Point2D(result.get(0).x, result.get(0).y));
+		result = Interpolation.interpolateArray(result, 4);
+		return result;
+	}
+	
+	public ArrayList<Enemy> generateEnemies(int count){
+		ArrayList<Enemy> result = new ArrayList<Enemy>();
+		
+		for(int i = 0; i < count; i++){
+			result.add(new BasicEnemy(0, 0, this));
+			result.get(i).setCurrentPath(generateRandomPath());
+		}
+		
+		return result;
+	}
+	
 
 	@Override
 	public void show() {
 		System.out.println("GameScreen shown");
+		rand = new Random();
 		
 		/*
 		 * Creation of paths with interpolation
@@ -109,14 +136,15 @@ public class GameScreen implements Screen {
 //			System.out.println(testvalues.get(i));
 //		}
 		
-		swarmList = new ArrayList<Swarm>();
+//		swarmList = new ArrayList<Swarm>();
+//		
+//		swarm = new Swarm(5, Direction.RIGHT, this);
+//		swarmList.add(swarm);
+//		
+//		swarm2 = new Swarm(5, Direction.LEFT, this);
+//		swarmList.add(swarm2);
 		
-		swarm = new Swarm(5, Direction.RIGHT, this);
-		swarmList.add(swarm);
-		
-		swarm2 = new Swarm(5, Direction.LEFT, this);
-		swarmList.add(swarm2);
-		
+			enemyList.addAll(generateEnemies(10));
 		
 	}
 
@@ -208,27 +236,27 @@ public class GameScreen implements Screen {
 		 * Update enemies
 		 */
 		
-		for(int i = 0; i < enemyList.size(); i++){
-			if(enemyList.get(i).getPosX() < 10){
-				for(int j = 0; j < enemyList.size(); j++){
-					if(enemyList.get(j).getCurrentState() != State.ARRIVING){
-						enemyList.get(j).setCurrentState(State.FLYINGRIGHT);
-					}
-				}
-				break;
-			}
-		}
-		
-		for(int i = 0; i < enemyList.size(); i++){
-			if(enemyList.get(i).getPosX() > 420 - enemyList.get(i).getBounds().width){
-				for(int j = 0; j < enemyList.size(); j++){
-					if(enemyList.get(j).getCurrentState() != State.ARRIVING){
-						enemyList.get(j).setCurrentState(State.FLYINGLEFT);
-					}
-				}
-				break;
-			}
-		}
+//		for(int i = 0; i < enemyList.size(); i++){
+//			if(enemyList.get(i).getPosX() < 10){
+//				for(int j = 0; j < enemyList.size(); j++){
+//					if(enemyList.get(j).getCurrentState() != State.ARRIVING){
+//						enemyList.get(j).setCurrentState(State.FLYINGRIGHT);
+//					}
+//				}
+//				break;
+//			}
+//		}
+//		
+//		for(int i = 0; i < enemyList.size(); i++){
+//			if(enemyList.get(i).getPosX() > 420 - enemyList.get(i).getBounds().width){
+//				for(int j = 0; j < enemyList.size(); j++){
+//					if(enemyList.get(j).getCurrentState() != State.ARRIVING){
+//						enemyList.get(j).setCurrentState(State.FLYINGLEFT);
+//					}
+//				}
+//				break;
+//			}
+//		}
 		
 		/*
 		 * Updating enemies
@@ -259,9 +287,9 @@ public class GameScreen implements Screen {
 		/*
 		 * Update swarms
 		 */
-		for(int i = 0; i < swarmList.size(); i++){
-			swarmList.get(i).update(delta);
-		}
+//		for(int i = 0; i < swarmList.size(); i++){
+//			swarmList.get(i).update(delta);
+//		}
 		
 	}
 
