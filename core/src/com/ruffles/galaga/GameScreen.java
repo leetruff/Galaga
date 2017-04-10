@@ -343,6 +343,7 @@ public class GameScreen implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		port.update(width, height);
+		renderer.setProjectionMatrix(cam.combined);
 	}
 
 	@Override
