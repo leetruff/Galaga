@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.sun.javafx.geom.Point2D;
 
 public class GameScreen implements Screen {
 

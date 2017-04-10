@@ -2,7 +2,6 @@ package com.ruffles.galaga;
 
 import java.util.ArrayList;
 
-import com.sun.javafx.geom.Point2D;
 
 /*
  * Class, which interpolates enemy paths, so they fly smoother
