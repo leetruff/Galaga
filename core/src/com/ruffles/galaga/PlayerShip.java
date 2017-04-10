@@ -48,22 +48,20 @@ public class PlayerShip extends Sprite{
 		frames.add(atlas.findRegion("7"));
 		frames.add(atlas.findRegion("8"));
 		
-		shipDefault = new Animation(0.15f, frames);
+		shipDefault = new Animation(0.25f, frames);
 		frames.clear();
 		
 		
-		bounds = new Rectangle(0, 0, 30, 30);
+		bounds = new Rectangle(0, 0, 75, 75);
 	}
 	
 	public void update(float delta){
 		setRegion((TextureRegion) shipDefault.getKeyFrame(stateTimer, true));
 		setPosition(posX, posY + 20);
 		
-		bounds.setPosition(posX + 15, 85);
+		bounds.setPosition(posX, 85);
 		
 		stateTimer += delta;
-		
-		System.out.println(this.getX() + ", " + this.getY());
 	}
 
 	public Rectangle getBounds() {
