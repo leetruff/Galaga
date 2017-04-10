@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class GameScreen implements Screen {
@@ -78,7 +80,7 @@ public class GameScreen implements Screen {
 	public void show() {
 		System.out.println("GameScreen shown");
 		rand = new Random();
-		
+
 		/*
 		 * Creation of paths with interpolation
 		 * middle of screen 430 / 2 = 215
@@ -215,22 +217,34 @@ public class GameScreen implements Screen {
 	
 	private void update(float delta) {
 
+		cam.update();
 		/*
 		 * Input Management
 		 */
-		if(Gdx.input.isKeyPressed(Keys.D)){
-			playership.setPosX(playership.getPosX() + 7);
+		if(Gdx.app.getType() == ApplicationType.Desktop){
+			if(Gdx.input.isKeyPressed(Keys.D)){
+				playership.setPosX(playership.getPosX() + 7);
+				
+				if(playership.getPosX() > 430 - playership.getBounds().getWidth()){
+					playership.setPosX((int) (430 - playership.getBounds().getWidth()));
+				}
+			}
 			
-			if(playership.getPosX() > 430 - playership.getBounds().getWidth()){
-				playership.setPosX((int) (430 - playership.getBounds().getWidth()));
+			if(Gdx.input.isKeyPressed(Keys.A)){
+				playership.setPosX(playership.getPosX() - 7);
+				
+				if(playership.getPosX() < 0){
+					playership.setPosX(0);
+				}
 			}
 		}
 		
-		if(Gdx.input.isKeyPressed(Keys.A)){
-			playership.setPosX(playership.getPosX() - 7);
-			
-			if(playership.getPosX() < 0){
-				playership.setPosX(0);
+		if(Gdx.app.getType() == ApplicationType.Android){
+			if(Gdx.input.isTouched()){
+				Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+				cam.unproject(touchPos);
+				
+				playership.setPosX((int) touchPos.x);
 			}
 		}
 		
@@ -247,7 +261,7 @@ public class GameScreen implements Screen {
 		
 		if(bullettimer > 0.125){
 			if(Gdx.input.isKeyPressed(Keys.SPACE)){
-				bulletList.add(new Bullet(playership.getPosX() + (int)playership.getBounds().width / 2 + 20, playership.getPosY() + 90, 10, this));
+				bulletList.add(new Bullet(playership.getPosX() + (int)playership.getBounds().width / 2 - 3, playership.getPosY() + 90, 10, this));
 			}
 			bullettimer = 0;
 		}

@@ -21,7 +21,7 @@ public class Bullet {
 	}
 	
 	public Bullet(int xSpawn, int ySpawn, int speed, GameScreen gameScreen){
-		bounds = new Rectangle(xSpawn, ySpawn, 5, 12);
+		bounds = new Rectangle(xSpawn, ySpawn, 6, 12);
 		shaperenderer = new ShapeRenderer();
 		shaperenderer.setAutoShapeType(true);
 		shaperenderer.begin();
