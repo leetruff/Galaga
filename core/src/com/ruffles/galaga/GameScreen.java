@@ -166,11 +166,11 @@ public class GameScreen implements Screen {
 		update(delta);
 		
 		
-		batch.setProjectionMatrix(cam.combined);
 		
 		
 		renderer.begin();
 		batch.begin();
+		batch.setProjectionMatrix(cam.combined);
 		
 		renderer.set(ShapeType.Filled);
 		
@@ -244,7 +244,16 @@ public class GameScreen implements Screen {
 				Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
 				cam.unproject(touchPos);
 				
-				playership.setPosX((int) touchPos.x);
+				playership.setPosX((int) (touchPos.x - playership.getBounds().getWidth() / 2));
+				
+				if(playership.getPosX() > 430 - playership.getBounds().getWidth()){
+					playership.setPosX((int) (430 - playership.getBounds().getWidth()));
+				}
+				
+				if(playership.getPosX() < 0){
+					playership.setPosX(0);
+				}
+
 			}
 		}
 		
