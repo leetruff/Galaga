@@ -33,6 +33,7 @@ public class GameScreen implements Screen {
 	
 	ArrayList<Enemy> enemyList;
 	ArrayList<Bullet> bulletList;
+	ArrayList<EnemyBullet> enemyBulletList;
 	ArrayList<Swarm> swarmList;
 	
 	Swarm swarm;
@@ -56,6 +57,9 @@ public class GameScreen implements Screen {
 	int lifes = 3;
 	
 	Texture smallShip;
+	
+	float attackTimer = 0;
+	int numberOfAttackers = 3;
 	
 	public ArrayList<Point2D> getPathLeft() {
 		return pathLeft;
@@ -147,6 +151,7 @@ public class GameScreen implements Screen {
 //		enemyList.add(new BasicEnemy(400, 400));
 		
 		bulletList = new ArrayList<Bullet>();
+		enemyBulletList = new ArrayList<EnemyBullet>();
 		
 //		ArrayList<Integer> testvalues = new ArrayList<Integer>();
 //		testvalues.add(1);
@@ -228,6 +233,10 @@ public class GameScreen implements Screen {
 			//renderer.rect(bulletList.get(i).getPosX(), bulletList.get(i).getPosY(), bulletList.get(i).bounds.width, bulletList.get(i).bounds.height);
 		}
 		
+		for(int i = 0; i < enemyBulletList.size(); i++){
+			enemyBulletList.get(i).draw(batch);
+			//renderer.rect(bulletList.get(i).getPosX(), bulletList.get(i).getPosY(), bulletList.get(i).bounds.width, bulletList.get(i).bounds.height);
+		}
 		
 		scoreFont.draw(batch, "Score: " + score, 5, 590);
 		lifeFont.draw(batch, "x " + lifes, 400, 20);
@@ -240,11 +249,20 @@ public class GameScreen implements Screen {
 	}
 
 	float bullettimer = 0;
+	float nextAttack = 3;
 	
 	private void update(float delta) {
 
 		cam.update();
 		
+		attackTimer += delta;
+		
+		if(attackTimer > nextAttack && enemyList.size() > 0){
+			toggleAttack(rand.nextInt(numberOfAttackers) + 1);
+			attackTimer = 0;
+			nextAttack = rand.nextFloat() * (5 - 1) + 1;
+			//System.out.println("Attack toggled! Next attack in " + nextAttack + " seconds!");
+		}
 		
 		/*
 		 * Background loop
@@ -332,6 +350,10 @@ public class GameScreen implements Screen {
 			bulletList.get(i).update(delta);
 		}
 		
+		for(int i = 0; i < enemyBulletList.size(); i++){
+			enemyBulletList.get(i).update(delta);
+		}
+		
 		/*
 		 * Check for enemy / bullet collision
 		 */
@@ -345,6 +367,16 @@ public class GameScreen implements Screen {
 		}
 		
 		/*
+		 * Check for enemyBullet / playerShip collision
+		 */
+		for(int i = 0; i < enemyBulletList.size(); i++){
+				if(Intersector.overlaps(enemyBulletList.get(i).bounds, playership.getBounds())){
+					playership.setHit(true);
+					enemyBulletList.get(i).setHit(true);
+				}
+		}
+		
+		/*
 		 * Update swarms
 		 */
 //		for(int i = 0; i < swarmList.size(); i++){
@@ -353,6 +385,14 @@ public class GameScreen implements Screen {
 		
 	}
 	
+	private void toggleAttack(int numberOfAttackers) {
+		for(int i = 0; i < numberOfAttackers; i++){
+			if(enemyList.size() != 0){
+				enemyList.get(rand.nextInt(enemyList.size())).attack();
+			}
+		}
+	}
+
 	public int getScore(){
 		return score;
 	}
@@ -363,6 +403,10 @@ public class GameScreen implements Screen {
 
 	public ArrayList<Bullet> getBulletList(){
 		return bulletList;
+	}
+	
+	public ArrayList<EnemyBullet> getEnemyBulletList(){
+		return enemyBulletList;
 	}
 	
 	@Override

@@ -25,6 +25,8 @@ public class PlayerShip extends Sprite{
 	TextureAtlas atlas;
 	private float stateTimer = 0;
 	
+	boolean hit;
+	
 	public ShapeRenderer getShaperenderer() {
 		return shaperenderer;
 	}
@@ -84,5 +86,9 @@ public class PlayerShip extends Sprite{
 	
 	public void setPosY(int posY) {
 		this.posY = posY;
+	}
+
+	public void setHit(boolean b) {
+		hit = b;
 	}
 }

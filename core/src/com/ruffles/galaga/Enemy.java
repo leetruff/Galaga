@@ -3,6 +3,7 @@ package com.ruffles.galaga;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -17,7 +18,7 @@ import com.badlogic.gdx.utils.Array;
  */
 public class Enemy extends Sprite {
 
-	int hitpoints;
+	int hitpoints = 10;
 	
 	
 	Rectangle bounds;
@@ -38,11 +39,14 @@ public class Enemy extends Sprite {
 	Animation shipDefault;
 	TextureAtlas atlas;
 	private float stateTimer = 0;
+	Texture flashTexture;
+	boolean flashing;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Enemy(int xSpawn, int ySpawn, GameScreen gameScreen){
 		
 		super(new Texture(Gdx.files.internal("redship/spaceship_enemy_start.png")));
+		flashTexture = new Texture(Gdx.files.internal("redship/spaceship_enemy_red_flash.png"));
 		setBounds(50, 50, (float) (50), (float) (50));
 		
 		bounds = new Rectangle(xSpawn, ySpawn, 50, 50);
@@ -76,12 +80,24 @@ public class Enemy extends Sprite {
 
 	private ArrayList<Point2D> currentPath = new ArrayList<Point2D>();
 	int pathStep = 0;
+
+
+	private float flashTimer;
 	
 	public void update(float delta){
 		
-		setRegion((TextureRegion) shipDefault.getKeyFrame(stateTimer, true));
-		setPosition(posX, posY);
+		
+		if(flashTimer > 0){
+			setRegion(flashTexture);
+			flashTimer -= delta;
+		}
+		
+		else{
+			setRegion((TextureRegion) shipDefault.getKeyFrame(stateTimer, true));
+		}
+		
 		stateTimer += delta;
+		setPosition(posX, posY);
 		timer += delta;
 		
 		if(timer > 0.04){
@@ -100,9 +116,17 @@ public class Enemy extends Sprite {
 		bounds.setPosition(getPosX(), getPosY());
 		
 		
+		
 		if(hit){
-			gameScreen.enemyList.remove(this);
-			gameScreen.setScore(gameScreen.getScore() + pointsOnKill);
+			hitpoints--;
+			
+			flashTimer = 0.10f;
+			
+			if(hitpoints <= 0){
+				gameScreen.enemyList.remove(this);
+				gameScreen.setScore(gameScreen.getScore() + pointsOnKill);
+			}
+			hit = false;
 		}
 		
 		
@@ -147,6 +171,10 @@ public class Enemy extends Sprite {
 
 	public void setCurrentPath(ArrayList<Point2D> path){
 		currentPath = path;
+	}
+
+	public void attack() {
+		gameScreen.getEnemyBulletList().add(new EnemyBullet(this.posX, this.posY, -7, gameScreen));
 	}
 	
 //	@SuppressWarnings("unchecked")

@@ -1,13 +1,11 @@
 package com.ruffles.galaga;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Bullet extends Sprite {
+public class EnemyBullet extends Sprite {
 
 	
 	Rectangle bounds;
@@ -18,11 +16,12 @@ public class Bullet extends Sprite {
 	boolean hit = false;
 	GameScreen gameScreen;
 	
-	public Bullet(int xSpawn, int ySpawn, int speed, GameScreen gameScreen){
+	public EnemyBullet(int xSpawn, int ySpawn, int speed, GameScreen gameScreen){
 		
-		super(new Texture(Gdx.files.internal("blueship/bullet.png")));
+		super(new Texture(Gdx.files.internal("redship/bullet_red.png")));
 		setBounds(xSpawn, ySpawn, 50, 50);
 		bounds = new Rectangle(xSpawn, ySpawn, 6, 12);
+		flip(false, true);
 		
 		this.posX = xSpawn;
 		this.posY = ySpawn;
@@ -56,7 +55,7 @@ public class Bullet extends Sprite {
 		bounds.setPosition(getPosX(), getPosY());
 		
 		if(posY > 600 || posY < -100 || hit){
-			gameScreen.getBulletList().remove(this);
+			gameScreen.getEnemyBulletList().remove(this);
 		}
 	}
 
