@@ -3,13 +3,15 @@ package com.ruffles.galaga;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -40,6 +42,9 @@ public class GameScreen implements Screen {
 	
 	ShapeRenderer renderer;
 	
+	Texture background;
+	int backgroundYpos = 0;
+	
 	public ArrayList<Point2D> getPathLeft() {
 		return pathLeft;
 	}
@@ -68,7 +73,7 @@ public class GameScreen implements Screen {
 		ArrayList<Enemy> result = new ArrayList<Enemy>();
 		
 		for(int i = 0; i < count; i++){
-			result.add(new BasicEnemy(-100, 0, this));
+			result.add(new Enemy(-100, 0, this));
 			result.get(i).setCurrentPath(generateRandomPath());
 		}
 		
@@ -81,6 +86,9 @@ public class GameScreen implements Screen {
 		System.out.println("GameScreen shown");
 		rand = new Random();
 
+		background = new Texture(Gdx.files.internal("backgrounds/starfield.png"));
+		background.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
+		
 		/*
 		 * Creation of paths with interpolation
 		 * middle of screen 430 / 2 = 215
@@ -110,7 +118,7 @@ public class GameScreen implements Screen {
 		pathRight = Interpolation.interpolateArray(pathRight, 3);
 		
 		
-		playership = new PlayerShip();
+		playership = new PlayerShip(MyGdxGame.V_WIDTH / 2 - 45, 0);
 		
 		cam = new OrthographicCamera();
 		port = new StretchViewport(MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT, cam);
@@ -172,26 +180,22 @@ public class GameScreen implements Screen {
 		batch.begin();
 		batch.setProjectionMatrix(cam.combined);
 		
-		renderer.set(ShapeType.Filled);
+		batch.draw(background, 0, 0, 800, 601, 0, backgroundYpos, 800, 601, false, false);
+		
+		renderer.set(ShapeType.Line);
 		
 		/*
 		 * Drawing the playership
 		 */
-//		playership.getShaperenderer().begin();
-//		playership.getShaperenderer().set(ShapeType.Filled);
-//		playership.getShaperenderer().rect(playership.getPosX(), playership.getPosY(), playership.getBounds().width, playership.getBounds().height);
-//		playership.getShaperenderer().end();
-		
+		playership.draw(batch);
+		//renderer.rect(playership.getBounds().x, playership.getBounds().y, playership.getBounds().width, playership.getBounds().height);
 		
 		/*
 		 * Drawing the enemies
 		 */
-		renderer.setColor(Color.RED);
 		for(int i = 0; i < enemyList.size(); i++){
-			//enemyList.get(i).getShaperenderer().begin();
-			//enemyList.get(i).getShaperenderer().set(ShapeType.Filled);
-			renderer.rect(enemyList.get(i).getPosX(), enemyList.get(i).getPosY(), enemyList.get(i).getBounds().width, enemyList.get(i).getBounds().height);
-			//enemyList.get(i).getShaperenderer().end();
+			enemyList.get(i).draw(batch);
+			//renderer.rect(enemyList.get(i).getBounds().x, enemyList.get(i).getBounds().y, enemyList.get(i).getBounds().width, enemyList.get(i).getBounds().height);
 		}
 		
 		/*
@@ -199,13 +203,10 @@ public class GameScreen implements Screen {
 		 */
 		renderer.setColor(Color.YELLOW);
 		for(int i = 0; i < bulletList.size(); i++){
-			//bulletList.get(i).getShaperenderer().begin();
-			//bulletList.get(i).getShaperenderer().set(ShapeType.Filled);
-			renderer.rect(bulletList.get(i).getPosX(), bulletList.get(i).getPosY(), bulletList.get(i).bounds.width, bulletList.get(i).bounds.height);
-			//bulletList.get(i).getShaperenderer().end();
+			bulletList.get(i).draw(batch);
+			//renderer.rect(bulletList.get(i).getPosX(), bulletList.get(i).getPosY(), bulletList.get(i).bounds.width, bulletList.get(i).bounds.height);
 		}
 		
-		playership.draw(batch);
 		
 		batch.end();
 		renderer.end();
@@ -218,6 +219,19 @@ public class GameScreen implements Screen {
 	private void update(float delta) {
 
 		cam.update();
+		
+		
+		/*
+		 * Background loop
+		 */
+		if(backgroundYpos > Integer.MIN_VALUE){
+			backgroundYpos -= 1;
+		}
+		else{
+			backgroundYpos = 0;
+		}
+		
+		
 		/*
 		 * Input Management
 		 */
@@ -269,40 +283,18 @@ public class GameScreen implements Screen {
 		bullettimer += delta;
 		
 		if(bullettimer > 0.125){
-			if(Gdx.input.isKeyPressed(Keys.SPACE)){
-				bulletList.add(new Bullet(playership.getPosX() + (int)playership.getBounds().width / 2 - 3, playership.getPosY() + 90, 10, this));
+			if(Gdx.input.isKeyPressed(Keys.SPACE) && Gdx.app.getType() == ApplicationType.Desktop){
+				bulletList.add(new Bullet(playership.getPosX() + (int)playership.getBounds().width / 2 + 2, playership.getPosY() + 90, 10, this));
+			}
+			
+			if(Gdx.input.isTouched() && Gdx.app.getType() == ApplicationType.Android){
+				bulletList.add(new Bullet(playership.getPosX() + (int)playership.getBounds().width / 2 + 2, playership.getPosY() + 90, 10, this));
 			}
 			bullettimer = 0;
 		}
 		
 		/*
 		 * Update enemies
-		 */
-		
-//		for(int i = 0; i < enemyList.size(); i++){
-//			if(enemyList.get(i).getPosX() < 10){
-//				for(int j = 0; j < enemyList.size(); j++){
-//					if(enemyList.get(j).getCurrentState() != State.ARRIVING){
-//						enemyList.get(j).setCurrentState(State.FLYINGRIGHT);
-//					}
-//				}
-//				break;
-//			}
-//		}
-//		
-//		for(int i = 0; i < enemyList.size(); i++){
-//			if(enemyList.get(i).getPosX() > 420 - enemyList.get(i).getBounds().width){
-//				for(int j = 0; j < enemyList.size(); j++){
-//					if(enemyList.get(j).getCurrentState() != State.ARRIVING){
-//						enemyList.get(j).setCurrentState(State.FLYINGLEFT);
-//					}
-//				}
-//				break;
-//			}
-//		}
-		
-		/*
-		 * Updating enemies
 		 */
 		for(int i = 0; i < enemyList.size(); i++){
 			enemyList.get(i).update(delta);

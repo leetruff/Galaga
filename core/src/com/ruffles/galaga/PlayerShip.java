@@ -30,11 +30,13 @@ public class PlayerShip extends Sprite{
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public PlayerShip(){
+	public PlayerShip(int xSpawn, int ySpawn){
 		
 		super(new Texture(Gdx.files.internal("blueship/1.png")));
 		setBounds(50, 50, (float) (75), (float) (75));
 		
+		posX = xSpawn;
+		posY = ySpawn;
 		
 		atlas = new TextureAtlas(Gdx.files.internal("blueship/blueship.pack"));
 		Array<TextureRegion> frames = new Array<TextureRegion>();
@@ -52,14 +54,14 @@ public class PlayerShip extends Sprite{
 		frames.clear();
 		
 		
-		bounds = new Rectangle(0, 0, 75, 75);
+		bounds = new Rectangle(0, 0, 65, 65);
 	}
 	
 	public void update(float delta){
 		setRegion((TextureRegion) shipDefault.getKeyFrame(stateTimer, true));
 		setPosition(posX, posY + 20);
 		
-		bounds.setPosition(posX, 85);
+		bounds.setPosition(posX + 5, posY + 20);
 		
 		stateTimer += delta;
 	}

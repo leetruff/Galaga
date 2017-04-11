@@ -30,11 +30,11 @@ public class Swarm {
 		
 		for(int i = 0; i < size; i++){
 			if(direction == Direction.LEFT){
-				enemyList.add(new BasicEnemy(-100, 300, gameScreen));
+				enemyList.add(new Enemy(-100, 300, gameScreen));
 			}
 			
 			if(direction == Direction.RIGHT){
-				enemyList.add(new BasicEnemy(600, 300, gameScreen));
+				enemyList.add(new Enemy(600, 300, gameScreen));
 			}
 		}
 		
