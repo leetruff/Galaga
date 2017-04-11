@@ -80,7 +80,7 @@ public class MainMenu implements Screen{
 		playButtonStyle.up = playUp;
 		
 		playButton = new ImageButton(playButtonStyle);
-		playButton.setSize(320, 140);
+		playButton.setSize(250, 70);
 		playButton.setPosition(MyGdxGame.V_WIDTH / 2 - playButton.getWidth() / 2, 260);
 		stage.addActor(playButton);
 		
@@ -95,7 +95,7 @@ public class MainMenu implements Screen{
 		optionsButtonStyle.up = optionsUp;
 		
 		optionsButton = new ImageButton(optionsButtonStyle);
-		optionsButton.setSize(320, 140);
+		optionsButton.setSize(250, 70);
 		optionsButton.setPosition(MyGdxGame.V_WIDTH / 2 - optionsButton.getWidth() / 2, 180);
 		stage.addActor(optionsButton);
 		
@@ -110,7 +110,7 @@ public class MainMenu implements Screen{
 		creditButtonStyle.up = creditsUp;
 		
 		creditsButton = new ImageButton(creditButtonStyle);
-		creditsButton.setSize(320, 140);
+		creditsButton.setSize(250, 70);
 		creditsButton.setPosition(MyGdxGame.V_WIDTH / 2 - creditsButton.getWidth() / 2, 100);
 		stage.addActor(creditsButton);
 		
@@ -125,7 +125,7 @@ public class MainMenu implements Screen{
 		exitButtonStyle.up = exitUp;
 		
 		exitButton = new ImageButton(exitButtonStyle);
-		exitButton.setSize(320, 140);
+		exitButton.setSize(250, 70);
 		exitButton.setPosition(MyGdxGame.V_WIDTH / 2 - exitButton.getWidth() / 2, 20);
 		stage.addActor(exitButton);
 		
