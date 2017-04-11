@@ -274,6 +274,9 @@ public class GameScreen implements Screen {
 			backgroundYpos = 0;
 		}
 		
+		if(enemyList.size() <= 0){
+			enemyList.addAll(generateEnemies(10));
+		}
 		
 		/*
 		 * Input Management
