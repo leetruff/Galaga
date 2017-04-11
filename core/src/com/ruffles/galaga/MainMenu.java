@@ -103,8 +103,8 @@ public class MainMenu implements Screen{
 		
 		
 		
-		Drawable creditsUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("buttons/creditst_buttons.png"))));
-		Drawable creditsDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("buttons/creditst_buttons_pressed.png"))));
+		Drawable creditsUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("buttons/Creditst_buttons.png"))));
+		Drawable creditsDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("buttons/Creditst_buttons_pressed.png"))));
 		creditButtonStyle = new ImageButtonStyle();
 		creditButtonStyle.over = creditsDown;
 		creditButtonStyle.up = creditsUp;
