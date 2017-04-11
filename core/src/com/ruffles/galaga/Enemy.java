@@ -26,6 +26,8 @@ public class Enemy extends Sprite {
 	int posY = 0;
 	boolean hit = false;
 	
+	int pointsOnKill = 100;
+	
 	
 	public enum State {FLYINGLEFT, FLYINGRIGHT, IDLE, ARRIVING};
 	State currentState = State.ARRIVING;
@@ -100,11 +102,15 @@ public class Enemy extends Sprite {
 		
 		if(hit){
 			gameScreen.enemyList.remove(this);
+			gameScreen.setScore(gameScreen.getScore() + pointsOnKill);
 		}
 		
 		
 	}
 	
+	public int getPointsOnKill(){
+		return pointsOnKill;
+	}
 	
 	public State getCurrentState() {
 		return currentState;

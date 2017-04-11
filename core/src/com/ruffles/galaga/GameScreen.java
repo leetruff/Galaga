@@ -352,6 +352,14 @@ public class GameScreen implements Screen {
 //		}
 		
 	}
+	
+	public int getScore(){
+		return score;
+	}
+	
+	public void setScore(int score){
+		this.score = score;
+	}
 
 	public ArrayList<Bullet> getBulletList(){
 		return bulletList;
