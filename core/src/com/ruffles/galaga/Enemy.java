@@ -82,13 +82,13 @@ public class Enemy extends Sprite {
 		stateTimer += delta;
 		timer += delta;
 		
-		if(timer > 0.03){
+		if(timer > 0.04){
 			if(pathStep < currentPath.size()){
 				posX = (int) currentPath.get(pathStep).x;
 				posY = (int) currentPath.get(pathStep).y;
 				pathStep++;
 				
-				if(pathStep == currentPath.size()){
+				if(pathStep >= currentPath.size()){
 					pathStep = 0;
 				}
 			}

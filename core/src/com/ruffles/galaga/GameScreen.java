@@ -12,7 +12,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
@@ -44,6 +47,15 @@ public class GameScreen implements Screen {
 	
 	Texture background;
 	int backgroundYpos = 0;
+	
+	FreeTypeFontGenerator generator;
+	private BitmapFont scoreFont;
+	private BitmapFont lifeFont;
+
+	int score = 0;
+	int lifes = 3;
+	
+	Texture smallShip;
 	
 	public ArrayList<Point2D> getPathLeft() {
 		return pathLeft;
@@ -83,11 +95,12 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		System.out.println("GameScreen shown");
 		rand = new Random();
 
 		background = new Texture(Gdx.files.internal("backgrounds/starfield.png"));
 		background.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
+		
+		smallShip = new Texture((Gdx.files.internal("blueship/1.png")));
 		
 		/*
 		 * Creation of paths with interpolation
@@ -118,7 +131,7 @@ public class GameScreen implements Screen {
 		pathRight = Interpolation.interpolateArray(pathRight, 3);
 		
 		
-		playership = new PlayerShip(MyGdxGame.V_WIDTH / 2 - 45, 0);
+		playership = new PlayerShip(MyGdxGame.V_WIDTH / 2 - 45, 20);
 		
 		cam = new OrthographicCamera();
 		port = new StretchViewport(MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT, cam);
@@ -163,6 +176,13 @@ public class GameScreen implements Screen {
 		renderer.setAutoShapeType(true);
 		renderer.setColor(Color.RED);
 		
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/timeburnerbold.ttf"));
+		FreeTypeFontParameter parameter1 = new FreeTypeFontParameter();
+		FreeTypeFontParameter parameter2 = new FreeTypeFontParameter();
+		parameter1.size = 16;
+		parameter2.size = 18;
+		scoreFont = generator.generateFont(parameter2);
+		lifeFont = generator.generateFont(parameter1);
 	}
 
 	@Override
@@ -181,6 +201,7 @@ public class GameScreen implements Screen {
 		batch.setProjectionMatrix(cam.combined);
 		
 		batch.draw(background, 0, 0, 800, 601, 0, backgroundYpos, 800, 601, false, false);
+		batch.draw(smallShip, 360, 3, 35, 35);
 		
 		renderer.set(ShapeType.Line);
 		
@@ -208,8 +229,12 @@ public class GameScreen implements Screen {
 		}
 		
 		
+		scoreFont.draw(batch, "Score: " + score, 5, 590);
+		lifeFont.draw(batch, "x " + lifes, 400, 20);
+		
 		batch.end();
 		renderer.end();
+		
 		
 		Gdx.graphics.setTitle("Galaga | " + Gdx.graphics.getFramesPerSecond() + " FPS");
 	}
