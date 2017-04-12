@@ -18,7 +18,7 @@ public class EnemyBullet extends Sprite {
 	
 	public EnemyBullet(int xSpawn, int ySpawn, int speed, GameScreen gameScreen){
 		
-		super(new Texture(Gdx.files.internal("redship/bullet_red.png")));
+		super(Assets.enemyBullet);
 		setBounds(xSpawn, ySpawn, 50, 50);
 		bounds = new Rectangle(xSpawn, ySpawn, 6, 12);
 		flip(false, true);

@@ -1,10 +1,6 @@
 package com.ruffles.galaga;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Bullet extends Sprite {
@@ -20,7 +16,7 @@ public class Bullet extends Sprite {
 	
 	public Bullet(int xSpawn, int ySpawn, int speed, GameScreen gameScreen){
 		
-		super(new Texture(Gdx.files.internal("blueship/bullet.png")));
+		super(Assets.friendlyBullet);
 		setBounds(xSpawn, ySpawn, 50, 50);
 		bounds = new Rectangle(xSpawn, ySpawn, 6, 12);
 		

@@ -42,11 +42,11 @@ public class Enemy extends Sprite {
 	Texture flashTexture;
 	boolean flashing;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ })
 	public Enemy(int xSpawn, int ySpawn, GameScreen gameScreen){
 		
-		super(new Texture(Gdx.files.internal("redship/spaceship_enemy_start.png")));
-		flashTexture = new Texture(Gdx.files.internal("redship/spaceship_enemy_red_flash.png"));
+		super(Assets.redShip);
+		flashTexture = Assets.flashTexture;
 		setBounds(50, 50, (float) (50), (float) (50));
 		
 		bounds = new Rectangle(xSpawn, ySpawn, 50, 50);
@@ -57,21 +57,8 @@ public class Enemy extends Sprite {
 		
 		this.gameScreen = gameScreen;
 		
-		atlas = new TextureAtlas(Gdx.files.internal("redship/basicenemy.pack"));
-		Array<TextureRegion> frames = new Array<TextureRegion>();
 		
-		frames.add(atlas.findRegion("spaceship_enemy_start"));
-		frames.add(atlas.findRegion("1"));
-		frames.add(atlas.findRegion("2"));
-		frames.add(atlas.findRegion("3"));
-		frames.add(atlas.findRegion("4"));
-		frames.add(atlas.findRegion("5"));
-		frames.add(atlas.findRegion("6"));
-		frames.add(atlas.findRegion("7"));
-		frames.add(atlas.findRegion("8"));
-		
-		shipDefault = new Animation(0.25f, frames);
-		frames.clear();
+		shipDefault = Assets.shipDefault;
 	}
 	
 	float timer = 0;
