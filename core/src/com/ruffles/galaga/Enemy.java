@@ -65,6 +65,7 @@ public class Enemy extends Sprite {
 		
 		shipDefault = Assets.shipDefault;
 		explosion = Assets.explosionAnimation;
+		
 	}
 	
 	float timer = 0;
@@ -89,6 +90,7 @@ public class Enemy extends Sprite {
 		else{
 			setRegion((TextureRegion) shipDefault.getKeyFrame(stateTimer, true));
 		}
+		//this.flip(false, true);
 		
 		stateTimer += delta;
 		setPosition(posX, posY);
