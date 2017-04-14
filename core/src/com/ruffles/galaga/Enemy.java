@@ -37,8 +37,11 @@ public class Enemy extends Sprite {
 	
 	@SuppressWarnings("rawtypes")
 	Animation shipDefault;
+	@SuppressWarnings("rawtypes")
+	Animation explosion;
 	TextureAtlas atlas;
 	private float stateTimer = 0;
+	private float explosionStateTimer = 0;
 	Texture flashTexture;
 	boolean flashing;
 
@@ -59,6 +62,7 @@ public class Enemy extends Sprite {
 		
 		
 		shipDefault = Assets.shipDefault;
+		explosion = Assets.explosionAnimation;
 	}
 	
 	float timer = 0;
@@ -107,13 +111,22 @@ public class Enemy extends Sprite {
 		if(hit){
 			hitpoints--;
 			
-			flashTimer = 0.10f;
 			
 			if(hitpoints <= 0){
-				gameScreen.enemyList.remove(this);
-				gameScreen.setScore(gameScreen.getScore() + pointsOnKill);
+				
+				setRegion((TextureRegion)explosion.getKeyFrame(explosionStateTimer, false));
+				explosionStateTimer += delta;
+				
+				if(explosion.isAnimationFinished(explosionStateTimer)){
+					gameScreen.enemyList.remove(this);
+					gameScreen.setScore(gameScreen.getScore() + pointsOnKill);
+				}
 			}
-			hit = false;
+			
+			else{
+				flashTimer = 0.10f;
+				hit = false;
+			}
 		}
 		
 		

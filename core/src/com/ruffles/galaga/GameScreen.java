@@ -61,6 +61,8 @@ public class GameScreen implements Screen {
 	float attackTimer = 0;
 	int numberOfAttackers = 3;
 	
+	boolean isShipAlive = true;
+	
 	public ArrayList<Point2D> getPathLeft() {
 		return pathLeft;
 	}
@@ -135,7 +137,7 @@ public class GameScreen implements Screen {
 		pathRight = Interpolation.interpolateArray(pathRight, 3);
 		
 		
-		playership = new PlayerShip(MyGdxGame.V_WIDTH / 2 - 45, 20);
+		playership = new PlayerShip(MyGdxGame.V_WIDTH / 2 - 45, 20, this);
 		
 		cam = new OrthographicCamera();
 		port = new StretchViewport(MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT, cam);
@@ -213,6 +215,7 @@ public class GameScreen implements Screen {
 		/*
 		 * Drawing the playership
 		 */
+		if(isShipAlive)
 		playership.draw(batch);
 		//renderer.rect(playership.getBounds().x, playership.getBounds().y, playership.getBounds().width, playership.getBounds().height);
 		
@@ -250,6 +253,8 @@ public class GameScreen implements Screen {
 
 	float bullettimer = 0;
 	float nextAttack = 3;
+
+	private float respawnTimer;
 	
 	private void update(float delta) {
 
@@ -257,7 +262,7 @@ public class GameScreen implements Screen {
 		
 		attackTimer += delta;
 		
-		if(attackTimer > nextAttack && enemyList.size() > 0){
+		if(attackTimer > nextAttack && enemyList.size() > 0 && isShipAlive){
 			toggleAttack(rand.nextInt(numberOfAttackers) + 1);
 			attackTimer = 0;
 			nextAttack = rand.nextFloat() * (5 - 1) + 1;
@@ -328,7 +333,7 @@ public class GameScreen implements Screen {
 		 */
 		bullettimer += delta;
 		
-		if(bullettimer > 0.125){
+		if(bullettimer > 0.125 && !playership.hit){
 			if(Gdx.input.isKeyPressed(Keys.SPACE) && Gdx.app.getType() == ApplicationType.Desktop){
 				bulletList.add(new Bullet(playership.getPosX() + (int)playership.getBounds().width / 2 + 2, playership.getPosY() + 90, 10, this));
 			}
@@ -372,13 +377,14 @@ public class GameScreen implements Screen {
 		/*
 		 * Check for enemyBullet / playerShip collision
 		 */
-		for(int i = 0; i < enemyBulletList.size(); i++){
-				if(Intersector.overlaps(enemyBulletList.get(i).bounds, playership.getBounds())){
-					playership.setHit(true);
-					enemyBulletList.get(i).setHit(true);
-				}
+		if(isShipAlive){
+			for(int i = 0; i < enemyBulletList.size(); i++){
+					if(Intersector.overlaps(enemyBulletList.get(i).bounds, playership.getBounds())){
+						playership.setHit(true);
+						enemyBulletList.get(i).setHit(true);
+					}
+			}
 		}
-		
 		/*
 		 * Update swarms
 		 */
@@ -386,6 +392,23 @@ public class GameScreen implements Screen {
 //			swarmList.get(i).update(delta);
 //		}
 		
+		/*
+		 * End Game
+		 */
+		
+		if(lifes <= 0){
+			//TODO END GAME
+		}
+		
+		if(!isShipAlive){
+			respawnTimer += delta;
+			
+			if(respawnTimer > 4){
+				isShipAlive = true;
+				respawnTimer = 0;
+				playership.hit = false;
+			}
+		}
 	}
 	
 	private void toggleAttack(int numberOfAttackers) {
@@ -394,6 +417,10 @@ public class GameScreen implements Screen {
 				enemyList.get(rand.nextInt(enemyList.size())).attack();
 			}
 		}
+	}
+	
+	public void setShipAlive(boolean b){
+		isShipAlive = b;
 	}
 
 	public int getScore(){
@@ -436,6 +463,10 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 
+	}
+
+	public void respawnShip() {
+		isShipAlive = false;
 	}
 
 }

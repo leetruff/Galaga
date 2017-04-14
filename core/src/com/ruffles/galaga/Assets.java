@@ -18,6 +18,10 @@ public class Assets {
 	static Texture friendlyBullet;
 	static Texture enemyBullet;
 	
+	static Texture explosionSheet;
+	@SuppressWarnings("rawtypes")
+	static Animation explosionAnimation;
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void load(){
 		redShip = new Texture(Gdx.files.internal("redship/spaceship_enemy_start.png"));
@@ -42,5 +46,23 @@ public class Assets {
 		
 		friendlyBullet = new Texture(Gdx.files.internal("blueship/bullet.png"));
 		enemyBullet = new Texture(Gdx.files.internal("redship/bullet_red.png"));
+		
+		
+		explosionSheet = new Texture(Gdx.files.internal("explosion/exp.png"));
+		
+		TextureRegion[][] tmp = TextureRegion.split(explosionSheet, 
+				explosionSheet.getWidth() / 4,
+				explosionSheet.getHeight() / 4);
+		
+		TextureRegion[] explosionFrames = new TextureRegion[4 * 4];
+		int index = 0;
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				explosionFrames[index++] = tmp[i][j];
+			}
+		}
+		
+		
+		explosionAnimation = new Animation<TextureRegion>(0.025f, explosionFrames);
 	}
 }

@@ -26,13 +26,20 @@ public class PlayerShip extends Sprite{
 	private float stateTimer = 0;
 	
 	boolean hit;
+
+	private float explosionStateTimer;
+
+	@SuppressWarnings("rawtypes")
+	private Animation explosion;
+	
+	GameScreen gameScreen;
 	
 	public ShapeRenderer getShaperenderer() {
 		return shaperenderer;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public PlayerShip(int xSpawn, int ySpawn){
+	public PlayerShip(int xSpawn, int ySpawn, GameScreen gameScreen){
 		
 		super(new Texture(Gdx.files.internal("blueship/1.png")));
 		setBounds(50, 50, (float) (75), (float) (75));
@@ -57,6 +64,10 @@ public class PlayerShip extends Sprite{
 		
 		
 		bounds = new Rectangle(0, 0, 65, 65);
+		
+		explosion = Assets.explosionAnimation;
+		
+		this.gameScreen = gameScreen;
 	}
 	
 	public void update(float delta){
@@ -66,6 +77,18 @@ public class PlayerShip extends Sprite{
 		bounds.setPosition(posX + 5, posY + 20);
 		
 		stateTimer += delta;
+		
+		if(hit){
+				setRegion((TextureRegion)explosion.getKeyFrame(explosionStateTimer, false));
+				explosionStateTimer += delta;
+				
+				if(explosion.isAnimationFinished(explosionStateTimer)){
+					gameScreen.lifes--;
+					gameScreen.respawnShip();
+					explosionStateTimer = 0;
+				}
+			
+		}
 	}
 
 	public Rectangle getBounds() {
