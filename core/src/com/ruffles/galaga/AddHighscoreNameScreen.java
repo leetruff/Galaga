@@ -125,6 +125,9 @@ public class AddHighscoreNameScreen implements Screen {
 		nameField = new TextField("", skin);
 		nameField.setPosition(100, 220);
 		nameField.setSize(200, 50);
+		nameField.setAlignment(5);
+		
+
 		
 		stage.addActor(nameField);
 	}
@@ -147,7 +150,7 @@ public class AddHighscoreNameScreen implements Screen {
 		scoreFont.draw(batch, "You qualified", 107, 550);
 		scoreFont.draw(batch, "for highscore!", 107, 510);
 		
-		scoreFont2.draw(batch, "Enter name:", 135, 430);
+		scoreFont2.draw(batch, "Enter name:", 142, 430);
 		
 		batch.end();
 		
