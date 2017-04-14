@@ -244,6 +244,11 @@ public class GameScreen implements Screen {
 		scoreFont.draw(batch, "Score: " + score, 5, 590);
 		lifeFont.draw(batch, "x " + lifes, 400, 20);
 		
+		if(respawnTimer > 0){
+			scoreFont.draw(batch, "Revive  in", 170, 270);
+			scoreFont.draw(batch, (int)(5 - respawnTimer) + "", 205, 230);
+		}
+		
 		batch.end();
 		renderer.end();
 		
@@ -255,6 +260,10 @@ public class GameScreen implements Screen {
 	float nextAttack = 3;
 
 	private float respawnTimer;
+
+	private float flyAttackTimer;
+
+	private float nextFlyAttack = 5;
 	
 	private void update(float delta) {
 
@@ -267,6 +276,14 @@ public class GameScreen implements Screen {
 			attackTimer = 0;
 			nextAttack = rand.nextFloat() * (5 - 1) + 1;
 			//System.out.println("Attack toggled! Next attack in " + nextAttack + " seconds!");
+		}
+		
+		flyAttackTimer += delta;
+		
+		if(flyAttackTimer > nextFlyAttack && enemyList.size() > 0 && isShipAlive){
+			toggleFlyAttack(playership.posX, playership.posY);
+			flyAttackTimer = 0;
+			nextFlyAttack = rand.nextFloat() * (5 - 1) + 1;
 		}
 		
 		/*
@@ -385,17 +402,20 @@ public class GameScreen implements Screen {
 					}
 			}
 		}
+
 		/*
-		 * Update swarms
+		 * Check for Enemy / playerShip collision
 		 */
-//		for(int i = 0; i < swarmList.size(); i++){
-//			swarmList.get(i).update(delta);
-//		}
+		for(int j = 0; j < enemyList.size(); j++){
+			if(Intersector.overlaps(playership.getBounds(), enemyList.get(j).getBounds())){
+				playership.setHit(true);
+			}
+		}
+		
 		
 		/*
 		 * End Game
 		 */
-		
 		if(lifes <= 0){
 			//TODO END GAME
 			if(IOController.qualifiesForHighscore(score)){
@@ -411,6 +431,11 @@ public class GameScreen implements Screen {
 			respawnTimer += delta;
 			playership.hit = false;
 			
+			//Skip respawn timer on last life
+			if(lifes == 1){
+				lifes--;
+			}
+			
 			if(respawnTimer > 4){
 				isShipAlive = true;
 				respawnTimer = 0;
@@ -420,6 +445,12 @@ public class GameScreen implements Screen {
 		}
 	}
 	
+	private void toggleFlyAttack(int posX, int posY) {
+		if(enemyList.size() != 0){
+			enemyList.get(rand.nextInt(enemyList.size())).flyAttack(posX, posY);
+		}
+	}
+
 	private void toggleAttack(int numberOfAttackers) {
 		for(int i = 0; i < numberOfAttackers; i++){
 			if(enemyList.size() != 0){

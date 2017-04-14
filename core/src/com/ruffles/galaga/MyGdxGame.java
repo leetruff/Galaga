@@ -14,10 +14,10 @@ public class MyGdxGame extends Game {
 	@Override
 	public void create () {
 		Assets.load();
-		//setScreen(new MainMenu(this, 0));
+		setScreen(new MainMenu(this, 0));
 		//setScreen(new AddHighscoreNameScreen(this, 0, 1520));
 		//setScreen(new HighscoreScreen(this, 0));
-		setScreen(new GameoverScreen(this, 0, 15202));
+		//setScreen(new GameoverScreen(this, 0, 15202));
 	}
 
 	@Override

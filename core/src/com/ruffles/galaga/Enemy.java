@@ -30,6 +30,8 @@ public class Enemy extends Sprite {
 	int pointsOnKill = 100;
 	
 	
+	
+	
 	public enum State {FLYINGLEFT, FLYINGRIGHT, IDLE, ARRIVING};
 	State currentState = State.ARRIVING;
 	
@@ -70,6 +72,7 @@ public class Enemy extends Sprite {
 
 
 	private ArrayList<Point2D> currentPath = new ArrayList<Point2D>();
+	private ArrayList<Point2D> normalPath = new ArrayList<Point2D>();
 	int pathStep = 0;
 
 
@@ -130,6 +133,14 @@ public class Enemy extends Sprite {
 		}
 		
 		
+		/*
+		 * End flyattack and return to normal path
+		 */
+		if(posY < 50){
+			currentPath = normalPath;
+			pathStep = 0;
+		}
+		
 	}
 	
 	public int getPointsOnKill(){
@@ -171,10 +182,20 @@ public class Enemy extends Sprite {
 
 	public void setCurrentPath(ArrayList<Point2D> path){
 		currentPath = path;
+		normalPath = path;
 	}
 
 	public void attack() {
 		gameScreen.getEnemyBulletList().add(new EnemyBullet(this.posX, this.posY, -7, gameScreen));
+	}
+
+	public void flyAttack(int posX2, int posY2) {
+		ArrayList<Point2D> attackPath = new ArrayList<Point2D>();
+		
+		attackPath.add(new Point2D(posX, posY));
+		attackPath.add(new Point2D(posX2, posY2));
+		currentPath = Interpolation.interpolateArray(attackPath, 5);
+		pathStep = 0;
 	}
 	
 //	@SuppressWarnings("unchecked")
