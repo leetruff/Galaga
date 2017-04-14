@@ -103,7 +103,7 @@ public class GameScreen implements Screen {
 	public void show() {
 		rand = new Random();
 
-		background = new Texture(Gdx.files.internal("backgrounds/starfield.png"));
+		background = Assets.background;
 		background.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 		
 		smallShip = new Texture((Gdx.files.internal("blueship/1.png")));
@@ -333,7 +333,7 @@ public class GameScreen implements Screen {
 		 */
 		bullettimer += delta;
 		
-		if(bullettimer > 0.125 && !playership.hit){
+		if(bullettimer > 0.125 && !playership.dead){
 			if(Gdx.input.isKeyPressed(Keys.SPACE) && Gdx.app.getType() == ApplicationType.Desktop){
 				bulletList.add(new Bullet(playership.getPosX() + (int)playership.getBounds().width / 2 + 2, playership.getPosY() + 90, 10, this));
 			}
@@ -398,15 +398,24 @@ public class GameScreen implements Screen {
 		
 		if(lifes <= 0){
 			//TODO END GAME
+			if(IOController.qualifiesForHighscore(score)){
+				game.setScreen(new AddHighscoreNameScreen(game, backgroundYpos, score));
+			}
+			
+			else{
+				game.setScreen(new GameoverScreen(game, backgroundYpos, score));
+			}
 		}
 		
 		if(!isShipAlive){
 			respawnTimer += delta;
+			playership.hit = false;
 			
 			if(respawnTimer > 4){
 				isShipAlive = true;
 				respawnTimer = 0;
-				playership.hit = false;
+				lifes--;
+				playership.dead = false;
 			}
 		}
 	}

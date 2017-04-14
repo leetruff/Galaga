@@ -34,6 +34,8 @@ public class PlayerShip extends Sprite{
 	
 	GameScreen gameScreen;
 	
+	public boolean dead = false;
+	
 	public ShapeRenderer getShaperenderer() {
 		return shaperenderer;
 	}
@@ -81,9 +83,9 @@ public class PlayerShip extends Sprite{
 		if(hit){
 				setRegion((TextureRegion)explosion.getKeyFrame(explosionStateTimer, false));
 				explosionStateTimer += delta;
+				dead = true;
 				
 				if(explosion.isAnimationFinished(explosionStateTimer)){
-					gameScreen.lifes--;
 					gameScreen.respawnShip();
 					explosionStateTimer = 0;
 				}

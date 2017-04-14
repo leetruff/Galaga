@@ -22,6 +22,8 @@ public class Assets {
 	@SuppressWarnings("rawtypes")
 	static Animation explosionAnimation;
 	
+	static Texture background;
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void load(){
 		redShip = new Texture(Gdx.files.internal("redship/spaceship_enemy_start.png"));
@@ -64,5 +66,7 @@ public class Assets {
 		
 		
 		explosionAnimation = new Animation<TextureRegion>(0.025f, explosionFrames);
+		
+		background = new Texture(Gdx.files.internal("backgrounds/starfield.png"));
 	}
 }

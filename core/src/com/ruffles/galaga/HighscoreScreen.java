@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -20,8 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-public class MainMenu implements Screen{
+public class HighscoreScreen implements Screen {
 
+	
 	MyGdxGame game;
 	OrthographicCamera cam;
 	StretchViewport port;
@@ -33,35 +35,38 @@ public class MainMenu implements Screen{
 	
 	Stage stage;
 	
-	ImageButtonStyle playButtonStyle;
+	ImageButtonStyle exitButtonStyle;
 	
-	ImageButton playButton;
-	ImageButton highscoreButton;
-	ImageButton optionsButton;
+	ImageButton exitButton;
 	
 	Skin skin;
-	private TextureAtlas atlas;
 	
 	FreeTypeFontGenerator generator;
-	private ImageButtonStyle optionsButtonStyle;
-	private ImageButtonStyle creditButtonStyle;
-	private ImageButton creditsButton;
-	private ImageButtonStyle exitButtonStyle;
-	private ImageButton exitButton;
 	
+	BitmapFont scoreFont;
 	
-	public MainMenu(MyGdxGame game, int backgroundYpos) {
+	String highscoreName1;
+	String highscoreName2;
+	String highscoreName3;
+	
+	int highscoreScore1;
+	int highscoreScore2;
+	int highscoreScore3;
+	
+	Texture goldmedal;
+	Texture silvermedal;
+	Texture bronzemedal;
+	
+	public HighscoreScreen(MyGdxGame game, int backgroundYpos) {
 		this.game = game;
 		this.backgroundYpos = backgroundYpos;
 	}
 	
-
 	@Override
 	public void show() {
 		cam = new OrthographicCamera();
 		port = new StretchViewport(MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT, cam);
 		cam.position.set(port.getWorldWidth() / 2, port.getWorldHeight() / 2, 0);
-		
 		
 		batch = new SpriteBatch();
 		
@@ -73,49 +78,11 @@ public class MainMenu implements Screen{
 		Gdx.input.setInputProcessor(stage);
 		
 		
-		Drawable playUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("buttons/play_buttons.png"))));
-		Drawable playDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("buttons/play_buttons_pressed_blue.png"))));
-		playButtonStyle = new ImageButtonStyle();
-		playButtonStyle.over = playDown;
-		playButtonStyle.up = playUp;
+		exitButtonStyle = new ImageButtonStyle();
 		
-		playButton = new ImageButton(playButtonStyle);
-		playButton.setSize(250, 70);
-		playButton.setPosition(MyGdxGame.V_WIDTH / 2 - playButton.getWidth() / 2, 260);
-		stage.addActor(playButton);
-		
-		
-		
-		
-		
-		Drawable optionsUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("buttons/optionst_buttons.png"))));
-		Drawable optionsDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("buttons/optionst_buttons_pressed.png"))));
-		optionsButtonStyle = new ImageButtonStyle();
-		optionsButtonStyle.over = optionsDown;
-		optionsButtonStyle.up = optionsUp;
-		
-		optionsButton = new ImageButton(optionsButtonStyle);
-		optionsButton.setSize(250, 70);
-		optionsButton.setPosition(MyGdxGame.V_WIDTH / 2 - optionsButton.getWidth() / 2, 180);
-		stage.addActor(optionsButton);
-		
-		
-		
-		
-		
-		Drawable creditsUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("buttons/Creditst_buttons.png"))));
-		Drawable creditsDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("buttons/Creditst_buttons_pressed.png"))));
-		creditButtonStyle = new ImageButtonStyle();
-		creditButtonStyle.over = creditsDown;
-		creditButtonStyle.up = creditsUp;
-		
-		creditsButton = new ImageButton(creditButtonStyle);
-		creditsButton.setSize(250, 70);
-		creditsButton.setPosition(MyGdxGame.V_WIDTH / 2 - creditsButton.getWidth() / 2, 100);
-		stage.addActor(creditsButton);
-		
-		
-		
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/timeburnerbold.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 25;
 		
 		
 		Drawable exitUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("buttons/exit_buttons.png"))));
@@ -129,31 +96,64 @@ public class MainMenu implements Screen{
 		exitButton.setPosition(MyGdxGame.V_WIDTH / 2 - exitButton.getWidth() / 2, 20);
 		stage.addActor(exitButton);
 		
-		
-		playButton.addListener(new ChangeListener() {
-	        public void changed (ChangeEvent event, Actor actor) {
-	        	Gdx.input.setInputProcessor(null);
-	            game.setScreen(new GameScreen(game, backgroundYpos));
-	        }
-	    });
-		
-		optionsButton.addListener(new ChangeListener() {
-	        public void changed (ChangeEvent event, Actor actor) {
-	        	//TODO
-	        }
-	    });
-		
-		creditsButton.addListener(new ChangeListener() {
-	        public void changed (ChangeEvent event, Actor actor) {
-	        	//TODO
-	        }
-	    });
-		
 		exitButton.addListener(new ChangeListener() {
 	        public void changed (ChangeEvent event, Actor actor) {
-	        	Gdx.app.exit();
+	        	game.setScreen(new MainMenu(game, backgroundYpos));
 	        }
 	    });
+		
+		/*
+		 * Font fuer Schriftzuege
+		 */
+		
+		FreeTypeFontParameter parameter2 = new FreeTypeFontParameter();
+		parameter2.size = 25;
+		scoreFont = generator.generateFont(parameter2);
+		
+		/*
+		 * Medaillen Texturen laden
+		 */
+		
+		goldmedal = new Texture(Gdx.files.internal("medals/goldmedalsmall.png"));
+		silvermedal = new Texture(Gdx.files.internal("medals/silvermedalsmall.png"));
+		bronzemedal = new Texture(Gdx.files.internal("medals/bronzemedalsmall.png"));
+		
+		/*
+		 * Highscores aus .prefs auslesen
+		 */
+		
+//		highscoreName1 = "Lars";
+//		highscoreName2 = "Lars";
+//		highscoreName3 = "Lars";
+//		
+//		highscoreScore1 = 16512;
+//		highscoreScore2 = 12941;
+//		highscoreScore3 = 5122;
+		
+		if(IOController.prefs.getString("highscoreName1") != null){
+			highscoreName1 = IOController.prefs.getString("highscoreName1", "-1");
+		}
+		
+		if(IOController.prefs.getInteger("highscoreScore1") > 0){
+			highscoreScore1 = IOController.prefs.getInteger("highscoreScore1");
+		}
+		
+		if(IOController.prefs.getString("highscoreName2") != null){
+			highscoreName2 = IOController.prefs.getString("highscoreName2", "-1");
+		}
+		
+		if(IOController.prefs.getInteger("highscoreScore2") > 0){
+			highscoreScore2 = IOController.prefs.getInteger("highscoreScore2");
+		}
+		
+		if(IOController.prefs.getString("highscoreName3") != null){
+			highscoreName3 = IOController.prefs.getString("highscoreName3", "-1");
+		}
+		
+		if(IOController.prefs.getInteger("highscoreScore3") > 0){
+			highscoreScore3 = IOController.prefs.getInteger("highscoreScore3");
+		}
+		
 	}
 
 	@Override
@@ -163,13 +163,38 @@ public class MainMenu implements Screen{
 		
 		update(delta);
 		
-		
 		batch.setProjectionMatrix(cam.combined);
 		
 		batch.begin();
 		batch.draw(background, 0, 0, 800, 601, 0, backgroundYpos, 800, 601, false, false);
+		
+		if(highscoreName1 != "-1"){
+			scoreFont.draw(batch, highscoreName1, 85, 500);
+			scoreFont.draw(batch, highscoreScore1 + "", 325, 500);
+			
+		}
+		scoreFont.draw(batch, "-", 230, 500);
+		batch.draw(goldmedal, 55, 477);
+		
+		if(highscoreName2 != "-1"){
+			scoreFont.draw(batch, highscoreName2, 85, 450);
+			scoreFont.draw(batch, highscoreScore2 + "", 325, 450);
+			
+		}
+		scoreFont.draw(batch, "-", 230, 450);
+		batch.draw(silvermedal, 55, 427);
+		
+		if(highscoreName3 != "-1"){
+			scoreFont.draw(batch, highscoreName3, 85, 400);
+			scoreFont.draw(batch, highscoreScore3 + "", 325, 400);
+			
+		}
+		scoreFont.draw(batch, "-", 230, 400);
+		batch.draw(bronzemedal, 55, 377);
+		
 		batch.end();
 		
+		//TODO Buttons
 		stage.act();
 		stage.draw();
 		
